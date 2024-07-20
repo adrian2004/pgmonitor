@@ -11,3 +11,9 @@ def get_usuarios_total():
         cursor.execute("SELECT count(*) FROM pg_stat_activity WHERE datname='monitored_db';")
         result = cursor.fetchone()
     return result[0] if result else 0
+
+def get_tamanho_base():
+    with connection.cursor() as cursor:
+        cursor.execute("select pg_size_pretty(pg_database_size(t1.datname)) from pg_database t1 where t1.datname = 'monitored_db';")
+        result = cursor.fetchone()
+    return result[0] if result else 0
