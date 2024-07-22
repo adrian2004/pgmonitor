@@ -21,7 +21,7 @@
       </div>
     </nav>
 
-    <h3>Usuários acessando a base</h3>
+   <!-- <h3>Usuários acessando a base 1</h3>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -32,7 +32,7 @@
             </tr>
         </thead>
         <tbody>
-          {% for user in logged_in_users %}
+          {% for user in logged_in_users1 %}
               <tr>
                   {% for field in user %}
                       <td>{{ field }}</td>
@@ -40,10 +40,24 @@
               </tr>
           {% endfor %}
       </tbody>
-  </table>
-  <p><b>Total:</b> {{ usuarios_total }}</p>
-  <h3>Tamanho da base de dados:</h3>
-  <p><b>Tamanho:</b> {{ tamanho_base }}<p></p>
+  </table>-->
+  <!--BASE 1-->
+  <div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">Localhost - monitored_db</h5>
+      <p class="card-text"><b>Usuários Logados:</b> {{ usuarios_total1 }}</p>
+      <p class="card-text"><b>Tamanho da base:</b> {{ tamanho_base1 }}</p>
+    </div>
+  </div>
+
+  <!--BASE 2-->
+  <div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">Localhost - monitored_db2</h5>
+      <p class="card-text"><b>Usuários Logados:</b> {{ usuarios_total2 }}</p>
+      <p class="card-text"><b>Tamanho da base:</b> {{ tamanho_base2 }}</p>
+    </div>
+  </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
 

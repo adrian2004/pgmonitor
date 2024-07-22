@@ -74,6 +74,8 @@ WSGI_APPLICATION = 'pgmonitor.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+DATABASE_ROUTERS = ['routers.db_routers.PrimaryRouter','routers.db_routers.SecondaryRouter']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -82,7 +84,10 @@ DATABASES = {
         'PASSWORD': '123',
         'HOST': 'localhost',
         'PORT': '5433',
-    }
+    },
+    'secondary': {
+        #Colocar informações de um segundo SERVIDOR que queira se conectar (Copiar do Default)
+    },
 }
 
 

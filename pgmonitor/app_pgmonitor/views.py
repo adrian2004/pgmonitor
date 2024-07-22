@@ -1,12 +1,21 @@
 from django.shortcuts import render
 from .models import Post
-from .utils import get_logged_in_users_count, get_usuarios_total, get_tamanho_base
+from .utils import get_usuarios1, get_usuarios_total1, get_base_tamanho1, get_usuarios2, get_usuarios_total2, get_base_tamanho2
 
 def home(request):
-    logged_in_users = get_logged_in_users_count()
-    usuarios_total = get_usuarios_total()
-    tamanho_base = get_tamanho_base()
+    #BASE 1
+    logged_in_users1 = get_usuarios1()
+    usuarios_total1 = get_usuarios_total1()
+    tamanho_base1 = get_base_tamanho1()
+    #BASE 2
+    logged_in_users2 = get_usuarios2()
+    usuarios_total2 = get_usuarios_total2()
+    tamanho_base2 = get_base_tamanho2()
+    #RENDER
     return render(request, 'monitor/home.html', 
-                  {'logged_in_users': logged_in_users, 
-                   'usuarios_total': usuarios_total,
-                   'tamanho_base': tamanho_base})
+                  {'logged_in_users1': logged_in_users1, 
+                   'usuarios_total1': usuarios_total1,
+                   'tamanho_base1': tamanho_base1,
+                   'logged_in_users2': logged_in_users2,
+                   'usuarios_total2': usuarios_total2,
+                   'tamanho_base2': tamanho_base2})
