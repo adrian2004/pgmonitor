@@ -5,5 +5,5 @@ from django.contrib import admin
 urlpatterns = [
     #rota, view responsável, nome de referência
     path('', views.home, name='home'),
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
 ]

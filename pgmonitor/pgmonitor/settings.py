@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from app_pgmonitor.constants import BASE_1
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -79,7 +80,7 @@ DATABASE_ROUTERS = ['routers.db_routers.PrimaryRouter','routers.db_routers.Secon
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'monitored_db',
+        'NAME': BASE_1,
         'USER': 'monitor',
         'PASSWORD': '123',
         'HOST': 'localhost',

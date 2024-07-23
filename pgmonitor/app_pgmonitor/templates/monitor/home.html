@@ -21,18 +21,36 @@
       </div>
     </nav>
 
-   <!-- <h3>Usuários acessando a base 1</h3>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>PID</th>
-                <th>Usuário</th>
-                <th>Database</th>
-                <th>Data/Hora Conexão</th>
-            </tr>
-        </thead>
-        <tbody>
-          {% for user in logged_in_users1 %}
+  <!--Card Home-->
+  <div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">Localhost - {{ base_1 }}</h5>
+      <p class="card-text"><b>Tamanho da base:</b> {{ tamanho_base }}</p>
+      <p class="card-text"><b>Total de conexões:</b> {{ usuarios_total }}</p>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Expandir Conexões</button>
+    </div>
+  </div>
+
+  <!-- Modal Conexões -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Conexões: {{ base_1 }}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+          <thead>
+              <tr>
+                  <th>PID</th>
+                  <th>Usuário</th>
+                  <th>Database</th>
+                  <th>Data/Hora Conexão</th>
+              </tr>
+          </thead>
+          <tbody>
+          {% for user in logged_in_users %}
               <tr>
                   {% for field in user %}
                       <td>{{ field }}</td>
@@ -40,24 +58,14 @@
               </tr>
           {% endfor %}
       </tbody>
-  </table>-->
-  <!--BASE 1-->
-  <div class="card" style="width: 18rem;">
-    <div class="card-body">
-      <h5 class="card-title">Localhost - monitored_db</h5>
-      <p class="card-text"><b>Usuários Logados:</b> {{ usuarios_total1 }}</p>
-      <p class="card-text"><b>Tamanho da base:</b> {{ tamanho_base1 }}</p>
+      </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+      </div>
     </div>
   </div>
-
-  <!--BASE 2-->
-  <div class="card" style="width: 18rem;">
-    <div class="card-body">
-      <h5 class="card-title">Localhost - monitored_db2</h5>
-      <p class="card-text"><b>Usuários Logados:</b> {{ usuarios_total2 }}</p>
-      <p class="card-text"><b>Tamanho da base:</b> {{ tamanho_base2 }}</p>
-    </div>
-  </div>
+</div>
 
     <!-- Optional JavaScript; choose one of the two! -->
 
