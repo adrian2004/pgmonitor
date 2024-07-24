@@ -26,13 +26,14 @@
     <div class="card-body">
       <h5 class="card-title">Localhost - {{ base_1 }}</h5>
       <p class="card-text"><b>Tamanho da base:</b> {{ tamanho_base }}</p>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tamanho_tabelas">Expandir Tabelas</button>
       <p class="card-text"><b>Total de conexões:</b> {{ usuarios_total }}</p>
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Expandir Conexões</button>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#conexoes">Expandir Conexões</button>
     </div>
   </div>
 
   <!-- Modal Conexões -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="conexoes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -53,6 +54,42 @@
           {% for user in logged_in_users %}
               <tr>
                   {% for field in user %}
+                      <td>{{ field }}</td>
+                  {% endfor %}
+              </tr>
+          {% endfor %}
+      </tbody>
+      </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <!-- Modal Tabelas -->
+ <div class="modal fade" id="tamanho_tabelas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Tamanho Tabelas: {{ base_1 }}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+          <thead>
+              <tr>
+                  <th>Schema</th>
+                  <th>Tabela</th>
+                  <th>Tamanho</th>
+                  <th>Tamanho Total</th>
+              </tr>
+          </thead>
+          <tbody>
+          {% for tamanho in tamanho_base_tabelas %}
+              <tr>
+                  {% for field in tamanho %}
                       <td>{{ field }}</td>
                   {% endfor %}
               </tr>
