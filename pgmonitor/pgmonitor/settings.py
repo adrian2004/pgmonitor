@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-from app_pgmonitor.constants import BASE_1
+from app_pgmonitor.constants import bases
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -77,19 +77,30 @@ WSGI_APPLICATION = 'pgmonitor.wsgi.application'
 
 DATABASE_ROUTERS = ['routers.db_routers.PrimaryRouter','routers.db_routers.SecondaryRouter']
 
-DATABASES = {
-    'default': {
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': bases[0],
+#        'USER': 'monitor',
+#        'PASSWORD': '123',
+#        'HOST': 'localhost',
+#        'PORT': '5433',
+#    },
+#}
+
+DATABASES = {}
+
+for i, base in enumerate(bases):
+    DATABASES[f'db_{i}'] = {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': BASE_1,
+        'NAME': base,
         'USER': 'monitor',
         'PASSWORD': '123',
         'HOST': 'localhost',
         'PORT': '5433',
-    },
-    'secondary': {
-        #Colocar informações de um segundo SERVIDOR que queira se conectar (Copiar do Default)
-    },
-}
+    }
+
+DATABASES['default'] = DATABASES['db_0']
 
 
 # Password validation

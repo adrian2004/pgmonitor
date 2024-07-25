@@ -4,15 +4,19 @@ from .utils import *
 from . import constants
 
 def home(request):
-    #GET
-    logged_in_users = get_usuarios()
-    usuarios_total = get_usuarios_total()
-    tamanho_base = get_base_tamanho()
-    tamanho_base_tabelas = get_base_tamanho_tabelas()
-    #RENDER
-    return render(request, 'monitor/home.html', 
-                  {'logged_in_users': logged_in_users, 
-                   'usuarios_total': usuarios_total,
-                   'tamanho_base_tabelas': tamanho_base_tabelas,
-                   'tamanho_base': tamanho_base,
-                   'base_1': constants.BASE_1})
+    bases = constants.bases
+    dynamic_data = []
+    
+    for i, base in enumerate(bases):
+        dynamic_data.append({
+            'base': base,
+            'logged_in_users': functions[f'get_usuarios_{i}'](),
+            'usuarios_total': functions[f'get_usuarios_total_{i}'](),
+            'tamanho_base': functions[f'get_base_tamanho_{i}'](),
+            'tamanho_base_tabelas': functions[f'get_base_tamanho_tabelas_{i}']()
+        })
+
+    context = {
+        'combined_data': zip(bases, dynamic_data)
+    }
+    return render(request, 'monitor/home.html', context)

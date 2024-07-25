@@ -1,1 +1,1 @@
-BASE_1 = 'monitored_db'
+bases = ['monitored_db','monitored_db2', 'postgres']
