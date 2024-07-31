@@ -1,120 +1,130 @@
-{% load static %}
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  <!-- Head -->
+  {% load static %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- Fav Icon -->
+  <link rel="icon" type="image/x-icon" href="{% static 'pgmonitor/favicon.ico' %}">
 
-    <!-- Fav Icon -->
-    <link rel="icon" type="image/x-icon" href="{% static 'pgmonitor/favicon.ico' %}">
-
-    <title>PG Monitor</title>
-  </head>
-  <body>
-    <nav class="navbar navbar-light bg-light">
-      <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">Monitoramento de Desempenho PostgreSQL</span>
-      </div>
-    </nav>
-
-    {% for base, data in combined_data %}
-    <!--Card Home-->
-    <div class="card" style="width: 18rem;">
-      <div class="card-body">
-        <h5 class="card-title">Localhost - {{ base }}</h5>
-        <p class="card-text"><b>Tamanho da base:</b> {{ data.tamanho_base }}</p>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tamanho_tabelas_{{ forloop.counter }}">Expandir Tabelas</button>
-        <p class="card-text"><b>Total de conexões:</b> {{ data.usuarios_total }}</p>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#conexoes_{{ forloop.counter }}">Expandir Conexões</button>
-      </div>
+  <!-- Título -->
+  <title>PG Monitor</title>
+</head>
+<body>
+  <nav class="navbar navbar-light bg-light">
+    <!-- Cabeçalho -->
+    <div class="container-fluid">
+      <span class="navbar-brand mb-0 h1">Monitoramento de Desempenho PostgreSQL</span>
     </div>
-
-    <!-- Modal Conexões -->
-  <div class="modal fade" id="conexoes_{{ forloop.counter }}" tabindex="-1" aria-labelledby="conexoesLabel_{{ forloop.counter }}" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="conexoesLabel_{{ forloop.counter }}">Conexões: {{ base }}</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>PID</th>
-                    <th>Usuário</th>
-                    <th>Database</th>
-                    <th>Data/Hora Conexão</th>
-                </tr>
-            </thead>
+  </nav>
+  
+  <!-- Hostname e Porta do servidor (Futuramente será dinâmico) -->
+  <div class="card-group" id="host_port">
+    <h5 class="card-body">Localhost:5432</h5>
+    <!-- Databases do servidor -->
+    <div class="card-group">
+      <!-- Card de cada dabase -->
+      {% for base, data in combined_data %}
+      <div class="card">
+        <h5 class="card-header text-center">{{ base }}</h5>
+        <div class="card-body">
+          <table class="table table-borderless">
             <tbody>
-            {% for user in data.logged_in_users %}
-                <tr>
-                    {% for field in user %}
-                        <td>{{ field }}</td>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-        </tbody>
-        </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+            <tr>
+              <td scope="row"><p class="card-text"><b>Tamanho da base:</b> {{ data.tamanho_base }}</p></th>
+              <td><button type="button" class="btn btn-info btn-sm w-100" data-bs-toggle="modal" data-bs-target="#tamanho_tabelas_{{ forloop.counter }}">Expandir Tabelas</button></td>
+            </tr>
+            <tr>
+              <td scope="row"><p class="card-text"><b>Total de conexões:</b> {{ data.usuarios_total }}</p></th>
+              <td><button type="button" class="btn btn-info btn-sm w-100" data-bs-toggle="modal" data-bs-target="#conexoes_{{ forloop.counter }}">Expandir Conexões</button></td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Modal Tabelas -->
-  <div class="modal fade" id="tamanho_tabelas_{{ forloop.counter }}" tabindex="-1" aria-labelledby="tamanhoTabelasLabel_{{ forloop.counter }}" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="tamanhoTabelasLabel_{{ forloop.counter }}">Tamanho Tabelas: {{ base }}</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Schema</th>
-                    <th>Tabela</th>
-                    <th>Tamanho</th>
-                    <th>Tamanho Total</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for tamanho in data.tamanho_base_tabelas %}
-                <tr>
-                    {% for field in tamanho %}
-                        <td>{{ field }}</td>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-        </tbody>
-        </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+      <!-- Modal Conexões -->
+      <div class="modal fade" id="conexoes_{{ forloop.counter }}" tabindex="-1" aria-labelledby="conexoesLabel_{{ forloop.counter }}" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="conexoesLabel_{{ forloop.counter }}">Conexões: {{ base }}</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>PID</th>
+                        <th>Usuário</th>
+                        <th>Database</th>
+                        <th>Data/Hora Conexão</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for user in data.logged_in_users %}
+                    <tr>
+                        {% for field in user %}
+                            <td>{{ field }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+
+      <!-- Modal Tabelas -->
+      <div class="modal fade" id="tamanho_tabelas_{{ forloop.counter }}" tabindex="-1" aria-labelledby="tamanhoTabelasLabel_{{ forloop.counter }}" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="tamanhoTabelasLabel_{{ forloop.counter }}">Tamanho Tabelas: {{ base }}</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Schema</th>
+                        <th>Tabela</th>
+                        <th>Tamanho</th>
+                        <th>Tamanho Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for tamanho in data.tamanho_base_tabelas %}
+                    <tr>
+                        {% for field in tamanho %}
+                            <td>{{ field }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
   {% endfor %}
+    </div>
+  </div>
 
-    <!-- Optional JavaScript; choose one of the two! -->
-
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    -->
-  </body>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
 </html>
